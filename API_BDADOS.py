@@ -3,12 +3,10 @@ import sqlite3
 
 app = Flask(__name__)
 
-# Função para conectar ao banco de dados SQLite
 def connect_db():
     conn = sqlite3.connect('bauru_participa.db')
     return conn
 
-# Criar tabelas no banco de dados
 def init_db():
     conn = connect_db()
     cursor = conn.cursor()
@@ -31,10 +29,8 @@ def init_db():
     conn.commit()
     conn.close()
 
-# Inicializar o banco de dados
 init_db()
 
-# Endpoint para criar enquete
 @app.route('/api/enquetes', methods=['POST'])
 def criar_enquete():
     data = request.get_json()
@@ -51,7 +47,6 @@ def criar_enquete():
     conn.close()
     return jsonify({'message': 'Enquete criada com sucesso', 'enquete_id': enquete_id}), 201
 
-# Endpoint para listar enquetes
 @app.route('/api/enquetes', methods=['GET'])
 def listar_enquetes():
     conn = connect_db()
@@ -61,7 +56,6 @@ def listar_enquetes():
     conn.close()
     return jsonify({'enquetes': enquetes})
 
-# Endpoint para obter detalhes de uma enquete
 @app.route('/api/enquetes/<int:id>', methods=['GET'])
 def detalhes_enquete(id):
     conn = connect_db()
@@ -75,8 +69,6 @@ def detalhes_enquete(id):
     opcoes = cursor.fetchall()
     conn.close()
     return jsonify({'enquete': enquete, 'opcoes': opcoes})
-
-# Outros endpoints podem ser implementados de maneira semelhante
 
 if __name__ == '__main__':
     app.run(debug=True)
